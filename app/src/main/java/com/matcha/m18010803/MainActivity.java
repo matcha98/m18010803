@@ -7,10 +7,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     ListView lv;
     String str[] = {"AA", "BB", "CCC", "DDDD", "EE"};
     ArrayList<Map<String, Object>> mylist = new ArrayList();
+    boolean[] chks;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,24 +58,41 @@ public class MainActivity extends AppCompatActivity {
         m5.put("img", R.drawable.tpe);
         mylist.add(m5);
         HashMap<String, Object> m6 = new HashMap<>();
-        m6.put("city", "4台中");
-        m6.put("code", "404");
+        m6.put("city", "2台中");
+        m6.put("code", "204");
         m6.put("img", R.drawable.tc);
         mylist.add(m6);
         HashMap<String, Object> m7 = new HashMap<>();
-        m7.put("city", "6台南");
-        m7.put("code", "606");
+        m7.put("city", "2台南");
+        m7.put("code", "206");
         m7.put("img", R.drawable.tn);
         mylist.add(m7);
         HashMap<String, Object> m8 = new HashMap<>();
-        m8.put("city", "7高雄");
-        m8.put("code", "707");
+        m8.put("city", "2高雄");
+        m8.put("code", "207");
         m8.put("img", R.drawable.kh);
         mylist.add(m8);
+        chks=new boolean[mylist.size()];
 
         lv=findViewById(R.id.listView);
         MyAdapter adapter=new MyAdapter();
         lv.setAdapter(adapter);
+
+        Button button=findViewById(R.id.button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                StringBuilder sb=new StringBuilder();
+                for(int i=0;i<mylist.size();i++)
+                {
+                    if(chks[i])
+                    {
+                        sb.append(mylist.get(i).get("city")+", ");
+                    }
+                }
+                Toast.makeText(MainActivity.this,sb,Toast.LENGTH_LONG).show();
+            }
+        });
 
     }
 
@@ -94,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public View getView(int position, View view, ViewGroup viewGroup)
+        public View getView(final int position, View view, ViewGroup viewGroup)
         {
             Log.d("GetView", "position:" + position);
             LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
@@ -106,6 +127,15 @@ public class MainActivity extends AppCompatActivity {
             tv2.setText(mylist.get(position).get("code").toString());
             ImageView img = v.findViewById(R.id.imageView);
             img.setImageResource((Integer) mylist.get(position).get("img"));
+            CheckBox chk=v.findViewById(R.id.checkBox);
+            chk.setChecked(chks[position]);
+            chk.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    chks[position]=b;
+                }
+            });
+
             return v;
 
         }
