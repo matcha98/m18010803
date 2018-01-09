@@ -72,11 +72,11 @@ public class MainActivity extends AppCompatActivity {
         m8.put("code", "207");
         m8.put("img", R.drawable.kh);
         mylist.add(m8);
-        chks=new boolean[mylist.size()];
 
         lv=findViewById(R.id.listView);
-        MyAdapter adapter=new MyAdapter();
+        MyAdapter adapter=new MyAdapter(mylist,MainActivity.this);
         lv.setAdapter(adapter);
+        chks=adapter.getChks();
 
         Button button=findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
@@ -96,48 +96,4 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    class MyAdapter extends BaseAdapter
-    {
-
-        @Override
-        public int getCount() {
-            return mylist.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return null;
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return 0;
-        }
-
-        @Override
-        public View getView(final int position, View view, ViewGroup viewGroup)
-        {
-            Log.d("GetView", "position:" + position);
-            LayoutInflater inflater = LayoutInflater.from(MainActivity.this);
-            View v = inflater.inflate(R.layout.layout1, null);
-
-            TextView tv = (TextView) v.findViewById(R.id.textView);
-            tv.setText(mylist.get(position).get("city").toString());
-            TextView tv2 = v.findViewById(R.id.textView2);
-            tv2.setText(mylist.get(position).get("code").toString());
-            ImageView img = v.findViewById(R.id.imageView);
-            img.setImageResource((Integer) mylist.get(position).get("img"));
-            CheckBox chk=v.findViewById(R.id.checkBox);
-            chk.setChecked(chks[position]);
-            chk.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    chks[position]=b;
-                }
-            });
-
-            return v;
-
-        }
-    }
 }
